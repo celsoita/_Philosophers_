@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:20:53 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/22 11:16:35 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/22 16:46:44 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,18 +29,21 @@ typedef struct s_info
 	size_t	sleep_time;
 	useconds_t	start_time;
 	pthread_mutex_t print;
-
+	pthread_mutex_t *forks;
 }		t_info;
 
 typedef struct  s_philo
 {
 	size_t		id;
-	size_t		num_eat;
+	//num of times each philo eat
+	size_t		eat_times;
+	//last eat of philo
 	useconds_t last_eat;
+	//number of meal total
 	size_t num_of_meal;
-	pthread_t	*philo;
-	pthread_mutex_t rfork;
-	pthread_mutex_t lfork;
+	pthread_t	philo;
+	pthread_mutex_t *rfork;
+	pthread_mutex_t *lfork;
 	t_info		*info;
 	
 }		t_philo;

@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:17:43 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/22 11:17:45 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/22 17:19:55 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,9 @@
 ◦ timestamp_in_ms X is thinking
 ◦ timestamp_in_ms X died
 */
-void	ft_info(char **argv)
+void	ft_info(char **argv, t_info *info)
 {
-	t_info	*info;
+	size_t	i;
 
 	info->num_philo = ft_atoi(argv[1]);
 	info->dead_time = ft_atoi(argv[2]);
@@ -30,6 +30,29 @@ void	ft_info(char **argv)
 	info->sleep_time = ft_atoi(argv[4]);
 	info->start_time = ft_time_ms();
 	pthread_mutex_init(&info->print, NULL);
+	info->forks = malloc(sizeof(pthread_mutex_t) * info->num_philo);
+	
+	i = 0;
+	while(i < info->num_philo)
+	{
+		pthread_mutex_init(&info->forks[i],NULL);
+		printf("fork %p\n", &info->forks[i]);
+		i++;
+	}
+}
+void ft_philo_init(t_philo philo, size_t id)
+{
+	philo.id = id;
+	printf("philo->id = %zu\n", philo.id);
+	philo.eat_times = -1;
+	philo.last_eat = philo.info->start_time;
+	printf("start_time = %u\n", philo.last_eat);
+	philo.rfork = &philo.info->forks[id];
+	printf("rfork %p\n", philo.rfork);
+	// if (id != philo.info->num_philo)
+		philo.lfork = &philo.info->forks[(id +1) % philo.info->num_philo];
+
+	printf("lfork %p\n", philo.lfork);
 }
  void	ft_mutex_printf(useconds_t time,t_philo *philo, char *str)
  {
@@ -39,34 +62,41 @@ void	ft_info(char **argv)
  }
 void	*routine(void *ph)
 {	
-	t_philo	*philo;
-	t_info	*info;
-	
-	philo->id = *(size_t *)ph;
-	pthread_mutex_lock(&info->print);
-		ft_mutex_printf(ft_time_ms() - info->start_time ,philo, "has take a fork");
-	pthread_mutex_unlock(&info->print);
+	// t_philo	*philo;
+	// t_info	*info;
+	(void) ph;
+	printf("ciao mondo\n");
 	return(NULL);
 }
 
 int	main(int argc, char **argv)
 {
 	t_philo	*guest;
-	t_info	*info;
+	t_info	info;
 	size_t	i;
 
+	guest = 0;
 	if (ft_check_arg(argc, argv))
 		return (ft_perror("invalid argument"));
-	if ((argc == 6 || argc == 5) && atoi(argv[1]) >= 1)
+	if ((argc == 6 || argc == 5) && ft_atoi(argv[1]) >= 1)
 	{
 	i = 0;
-	ft_info(argv);
-		while(i < info->num_philo)
+	guest = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
+	if (!guest)
+			return (0);
+	ft_info(argv,&info);
+	guest->info = &info;
+		while(i < info.num_philo)
 		{
-			pthread_create(&guest->philo[i], NULL, routine, guest->philo[i]);
+			guest[i].info = &info;
+			ft_philo_init(guest[i],i);
+			pthread_create(&guest[i].philo, NULL, &routine, &guest[i]);
+			usleep(10);
 			i++;
 		}
 	}
+	else
+		printf("few argoments\n");
 	return(0);
 }
 /*int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
