@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:17:43 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/22 17:19:55 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/23 14:42:40 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,52 +20,58 @@
 ◦ timestamp_in_ms X is thinking
 ◦ timestamp_in_ms X died
 */
-void	ft_info(char **argv, t_info *info)
-{
-	size_t	i;
+// void	ft_info(char **argv, t_info *info)
+// {
+// 	size_t	i;
 
-	info->num_philo = ft_atoi(argv[1]);
-	info->dead_time = ft_atoi(argv[2]);
-	info->time_eat = ft_atoi(argv[3]);
-	info->sleep_time = ft_atoi(argv[4]);
-	info->start_time = ft_time_ms();
-	pthread_mutex_init(&info->print, NULL);
-	info->forks = malloc(sizeof(pthread_mutex_t) * info->num_philo);
+// 	info->num_philo = ft_atoi(argv[1]);
+// 	info->dead_time = ft_atoi(argv[2]);
+// 	info->time_eat = ft_atoi(argv[3]);
+// 	info->sleep_time = ft_atoi(argv[4]);
+// 	info->start_time = ft_time_ms();
+// 	pthread_mutex_init(&info->print, NULL);
+// 	info->forks = malloc(sizeof(pthread_mutex_t) * info->num_philo);
 	
-	i = 0;
-	while(i < info->num_philo)
-	{
-		pthread_mutex_init(&info->forks[i],NULL);
-		printf("fork %p\n", &info->forks[i]);
-		i++;
-	}
-}
-void ft_philo_init(t_philo philo, size_t id)
-{
-	philo.id = id;
-	printf("philo->id = %zu\n", philo.id);
-	philo.eat_times = -1;
-	philo.last_eat = philo.info->start_time;
-	printf("start_time = %u\n", philo.last_eat);
-	philo.rfork = &philo.info->forks[id];
-	printf("rfork %p\n", philo.rfork);
-	// if (id != philo.info->num_philo)
-		philo.lfork = &philo.info->forks[(id +1) % philo.info->num_philo];
+// 	i = 0;
+// 	while(i < info->num_philo)
+// 	{
+// 		pthread_mutex_init(&info->forks[i],NULL);
+// 		printf("fork %p\n", &info->forks[i]);
+// 		i++;
+// 	}
+// }
+// void ft_philo_init(t_philo philo, size_t id)
+// {
+// 	philo.id = id;
+// 	printf("philo->id = %zu\n", philo.id);
+// 	philo.eat_times = -1;
+// 	philo.last_eat = philo.info->start_time;
+// 	printf("start_time = %u\n", philo.last_eat);
+// 	philo.rfork = &philo.info->forks[id];
+// 	printf("rfork %p\n", philo.rfork);
+// 	// if (id != philo.info->num_philo)
+// 		philo.lfork = &philo.info->forks[(id +1) % philo.info->num_philo];
 
-	printf("lfork %p\n", philo.lfork);
+// 	printf("lfork %p\n", philo.lfork);
+// }
+//  void	ft_mutex_printf(useconds_t time,t_philo *philo, char *str)
+//  {
+// 	pthread_mutex_lock(&philo->info->print);
+// 	printf("%u %zu %s\n", time, philo->id, str);
+// 	pthread_mutex_unlock(&philo->info->print);
+//  }
+void	ft_init_fork(t_philo *philo)
+{
+	pthread_mutex_init(philo->rfork, NULL);
+	pthread_mutex_init(philo->lfork, NULL);
 }
- void	ft_mutex_printf(useconds_t time,t_philo *philo, char *str)
- {
-	pthread_mutex_lock(&philo->info->print);
-	printf("%u %zu %s\n", time, philo->id, str);
-	pthread_mutex_unlock(&philo->info->print);
- }
 void	*routine(void *ph)
 {	
-	// t_philo	*philo;
+	t_philo	*philo;
 	// t_info	*info;
-	(void) ph;
-	printf("ciao mondo\n");
+	philo = (t_philo *) ph;
+
+		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, "has taken a fork");
 	return(NULL);
 }
 

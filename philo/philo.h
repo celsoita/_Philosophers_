@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:20:53 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/22 16:46:44 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/23 11:25:56 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,13 @@ typedef struct  s_philo
 //ft_philo_utils
 int		ft_atoi(const char *str);
 int		ft_time_ms(void);
-//ft_check_args
+void	ft_mutex_printf(useconds_t time,t_philo *philo, char *str);
+//ft_check_arg
 int		ft_isdigit(char *str);
 int		ft_check_arg(int argc, char **argv);
 bool	ft_perror(char *str);
+//ft_philo_init
+void	ft_info(char **argv, t_info *info);
+void ft_philo_init(t_philo philo, size_t id);
 
 #endif

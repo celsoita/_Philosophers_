@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:48:06 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/22 09:15:30 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/23 11:10:57 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ int	ft_atoi(const char *str)
 	}
 	return (res * sign);
 }
+
 int	ft_time_ms(void)
 {
 	struct timeval	time;
@@ -43,3 +44,10 @@ int	ft_time_ms(void)
 	gettimeofday(&time, NULL);
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
+
+ void	ft_mutex_printf(useconds_t time,t_philo *philo, char *str)
+ {
+	pthread_mutex_lock(&philo->info->print);
+	printf("%u %zu %s\n", time, philo->id, str);
+	pthread_mutex_unlock(&philo->info->print);
+ }
