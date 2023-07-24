@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:17:43 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/23 14:42:40 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/24 12:35:22 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,61 +20,79 @@
 ◦ timestamp_in_ms X is thinking
 ◦ timestamp_in_ms X died
 */
-// void	ft_info(char **argv, t_info *info)
-// {
-// 	size_t	i;
-
-// 	info->num_philo = ft_atoi(argv[1]);
-// 	info->dead_time = ft_atoi(argv[2]);
-// 	info->time_eat = ft_atoi(argv[3]);
-// 	info->sleep_time = ft_atoi(argv[4]);
-// 	info->start_time = ft_time_ms();
-// 	pthread_mutex_init(&info->print, NULL);
-// 	info->forks = malloc(sizeof(pthread_mutex_t) * info->num_philo);
-	
-// 	i = 0;
-// 	while(i < info->num_philo)
-// 	{
-// 		pthread_mutex_init(&info->forks[i],NULL);
-// 		printf("fork %p\n", &info->forks[i]);
-// 		i++;
-// 	}
-// }
-// void ft_philo_init(t_philo philo, size_t id)
-// {
-// 	philo.id = id;
-// 	printf("philo->id = %zu\n", philo.id);
-// 	philo.eat_times = -1;
-// 	philo.last_eat = philo.info->start_time;
-// 	printf("start_time = %u\n", philo.last_eat);
-// 	philo.rfork = &philo.info->forks[id];
-// 	printf("rfork %p\n", philo.rfork);
-// 	// if (id != philo.info->num_philo)
-// 		philo.lfork = &philo.info->forks[(id +1) % philo.info->num_philo];
-
-// 	printf("lfork %p\n", philo.lfork);
-// }
-//  void	ft_mutex_printf(useconds_t time,t_philo *philo, char *str)
-//  {
-// 	pthread_mutex_lock(&philo->info->print);
-// 	printf("%u %zu %s\n", time, philo->id, str);
-// 	pthread_mutex_unlock(&philo->info->print);
-//  }
 void	ft_init_fork(t_philo *philo)
 {
 	pthread_mutex_init(philo->rfork, NULL);
 	pthread_mutex_init(philo->lfork, NULL);
 }
+//philo action 
+/*il contatore pasti funziona ora devo implementare un controllo per obbligare a fare un tot numero di pasti*/
 void	*routine(void *ph)
 {	
 	t_philo	*philo;
+	size_t		num_of_meal;
+
+	num_of_meal = 0;
 	// t_info	*info;
 	philo = (t_philo *) ph;
+	while (1)
+	{	
+		pthread_mutex_lock(philo->rfork);
+		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, "has taken a Rfork");
+		pthread_mutex_lock(philo->lfork);
+		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, "has taken a Lfork");
+		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, "is eating");
+		philo->eat_times = num_of_meal++;
+		 printf("num of meal {-%zu-} of philo [%zu]\n",philo->eat_times, philo->id);
+		philo->last_eat = ft_time_ms() - philo->info->start_time;
+		usleep(philo->info->time_eat * 1000);
+		//printf("aggiornamento pasto philo [%zu] %u\n",philo->id, philo->last_eat);
+		pthread_mutex_unlock(philo->rfork);
+		pthread_mutex_unlock(philo->lfork);
+		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, "is sleeping");
+		usleep(philo->info->sleep_time * 1000);
+		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, "is thinking");
+		//qui ho aggiunto philo->eat_times == philo->info->eat_times per capire quando hanno mangiato tutti e farlo uscire
+		if (philo->death == true || philo->eat_times == philo->info->eat_times)
+			return (NULL);
+	}
 
-		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, "has taken a fork");
 	return(NULL);
 }
+/*
+	ho settato un contatore che aumenta ad ogni pasto del philosofo ora devo mettere 
+	un controllo che mi vede se il philosofo [?] ha eseguito tutti i pasti;
+	potrei mettere il controllo nella morte;
+*/
+void	ft_free_program(t_philo *philo)
+{
+	size_t	i;
 
+	i = 0;
+	while(i < philo->info->num_philo)
+	{
+		pthread_join(philo[i].philo, NULL);
+		i++;
+	}
+	pthread_join(philo->info->death, NULL);
+	i = 0;
+	while (i < philo->info->num_philo)
+	{
+		pthread_mutex_destroy(philo[i].rfork);
+		pthread_mutex_destroy(philo[i].lfork);
+		i++;
+	}
+	pthread_mutex_destroy(&philo->info->print);
+	
+	i = 0;
+	while (i < philo->info->num_philo)
+	{
+		pthread_mutex_destroy(&philo->info->forks[i]);
+		i++;
+	}
+	free(philo->info->forks);
+	free(philo);	
+}
 int	main(int argc, char **argv)
 {
 	t_philo	*guest;
@@ -86,25 +104,26 @@ int	main(int argc, char **argv)
 		return (ft_perror("invalid argument"));
 	if ((argc == 6 || argc == 5) && ft_atoi(argv[1]) >= 1)
 	{
-	i = 0;
-	guest = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
-	if (!guest)
-			return (0);
-	ft_info(argv,&info);
-	guest->info = &info;
+		i = 0;
+		guest = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
+		if (!guest)
+				return (0);
+		if (argc == 6)
+			info.eat_times = ft_atoi(argv[5]);
+		ft_info(argv,&info);
 		while(i < info.num_philo)
 		{
 			guest[i].info = &info;
-			ft_philo_init(guest[i],i);
-			pthread_create(&guest[i].philo, NULL, &routine, &guest[i]);
+			ft_philo_init(&guest[i],i);
+			pthread_create(&guest[i].philo, NULL, &routine, (void *)&guest[i]);
 			usleep(10);
 			i++;
 		}
 	}
-	else
-		printf("few argoments\n");
+	pthread_create(&guest->info->death, NULL, &deathcheck, (void *)guest);
+	ft_free_program(guest);
 	return(0);
 }
-/*int pthread_create(pthread_t *thread, const pthread_attr_t *attr,
-    void *(*start_routine)(void*), void *arg);
+/*
+sembro aver risolto tutti i leak nel valgrind normale ora devo controllare i data race
 */

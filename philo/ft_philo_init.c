@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 11:01:53 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/23 12:20:58 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/24 12:35:30 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,17 +33,20 @@ void	ft_info(char **argv, t_info *info)
 	}
 }
 
-void ft_philo_init(t_philo philo, size_t id)
+void ft_philo_init(t_philo *philo, size_t id)
 {
-	philo.id = id;
-	printf("philo->id = %zu\n", philo.id);
-	philo.eat_times = -1;
-	philo.last_eat = philo.info->start_time;
-	//printf("start_time = %u\n", philo.last_eat);
-	philo.rfork = &philo.info->forks[id];
-	// printf("rfork %p\n", philo.rfork);
-	// if (id != philo.info->num_philo)
-		philo.lfork = &philo.info->forks[(id +1) % philo.info->num_philo];
-
-	// printf("lfork %p\n", philo.lfork);
+	philo->id = id;
+	philo->eat_times = -1;
+	philo->last_eat =  ft_time_ms() - philo->info->start_time;
+	if (id % 2 == 0)
+	{
+		philo->rfork = &philo->info->forks[id];
+		philo->lfork = &philo->info->forks[(id +1) % philo->info->num_philo];
+	}
+	else
+	{
+		philo->lfork = &philo->info->forks[id];
+		philo->rfork = &philo->info->forks[(id +1) % philo->info->num_philo];
+	}
+	philo->death = false;
 }
