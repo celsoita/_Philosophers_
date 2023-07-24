@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:20:53 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/24 15:34:15 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/24 20:21:29 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,7 @@ typedef struct s_info
 	pthread_mutex_t time;
 	pthread_mutex_t *forks;
 	pthread_mutex_t	meals;
+	pthread_mutex_t morto;
 	pthread_t death;
 }		t_info;
 
@@ -57,6 +58,7 @@ typedef struct  s_philo
 	pthread_mutex_t *lfork;
 	bool		death;
 	t_info		*info;
+	int			plus;
 	
 }		t_philo;
 
@@ -73,5 +75,10 @@ void	ft_info(char **argv, t_info *info);
 void ft_philo_init(t_philo *philo, size_t id);
 //ft_death_check
 void	*deathcheck(void *ph);
+//ft_free_program
+void	ft_free_program(t_philo *philo);
+//ft_routine
+void	*routine(void *ph);
+void	ft_init_fork(t_philo *philo);
 
 #endif
