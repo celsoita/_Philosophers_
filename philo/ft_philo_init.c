@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/23 11:01:53 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/24 12:35:30 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/24 15:34:31 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ void	ft_info(char **argv, t_info *info)
 	info->sleep_time = ft_atoi(argv[4]);
 	info->start_time = ft_time_ms();
 	pthread_mutex_init(&info->print, NULL);
+	pthread_mutex_init(&info->time, NULL);
+	pthread_mutex_init(&info->meals, NULL);
 	info->forks = malloc(sizeof(pthread_mutex_t) * info->num_philo);
 	
 	i = 0;

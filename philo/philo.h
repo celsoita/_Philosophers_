@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:20:53 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/24 12:35:29 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/24 15:34:15 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,13 @@
 # include <sys/time.h>
 # include <stdbool.h>
 
+# define TAKE_LFORKS "\e[1;37mhas taken a left fork\e[0m"
+# define TAKE_RFORKS "\e[1;37mhas taken a right fork\e[0m"
+# define THINKING "\e[1;32mis thinking\e[0m"
+# define SLEEPING "\e[1;34mis sleeping\e[0m"
+# define EATING "\e[1;35mis eating\e[0m"
+# define DIED "\e[1;31mdied\e[0m"
+
 typedef struct s_info
 {
 	size_t	num_philo;
@@ -30,7 +37,9 @@ typedef struct s_info
 	size_t	eat_times;
 	useconds_t	start_time;
 	pthread_mutex_t print;
+	pthread_mutex_t time;
 	pthread_mutex_t *forks;
+	pthread_mutex_t	meals;
 	pthread_t death;
 }		t_info;
 

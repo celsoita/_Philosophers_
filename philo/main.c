@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:17:43 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/24 12:35:22 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/24 16:12:38 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,26 +35,33 @@ void	*routine(void *ph)
 	num_of_meal = 0;
 	// t_info	*info;
 	philo = (t_philo *) ph;
+	//ho aggiunto philo->info->time che e' un mutex per proteggere le info del time 
 	while (1)
 	{	
 		pthread_mutex_lock(philo->rfork);
-		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, "has taken a Rfork");
+		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, TAKE_LFORKS);
 		pthread_mutex_lock(philo->lfork);
-		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, "has taken a Lfork");
-		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, "is eating");
+		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, TAKE_RFORKS);
+		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, EATING);
+		pthread_mutex_lock(&philo->info->meals);
 		philo->eat_times = num_of_meal++;
-		 printf("num of meal {-%zu-} of philo [%zu]\n",philo->eat_times, philo->id);
+		pthread_mutex_unlock(&philo->info->meals);
+		pthread_mutex_lock(&philo->info->time);
 		philo->last_eat = ft_time_ms() - philo->info->start_time;
+		pthread_mutex_unlock(&philo->info->time);
 		usleep(philo->info->time_eat * 1000);
-		//printf("aggiornamento pasto philo [%zu] %u\n",philo->id, philo->last_eat);
 		pthread_mutex_unlock(philo->rfork);
 		pthread_mutex_unlock(philo->lfork);
-		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, "is sleeping");
+		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, SLEEPING);
 		usleep(philo->info->sleep_time * 1000);
-		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, "is thinking");
-		//qui ho aggiunto philo->eat_times == philo->info->eat_times per capire quando hanno mangiato tutti e farlo uscire
+		ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, THINKING);
+		pthread_mutex_lock(&philo->info->print);
 		if (philo->death == true || philo->eat_times == philo->info->eat_times)
+		{
+			pthread_mutex_unlock(&philo->info->print);
 			return (NULL);
+		}
+		pthread_mutex_unlock(&philo->info->print);
 	}
 
 	return(NULL);
@@ -75,15 +82,9 @@ void	ft_free_program(t_philo *philo)
 		i++;
 	}
 	pthread_join(philo->info->death, NULL);
-	i = 0;
-	while (i < philo->info->num_philo)
-	{
-		pthread_mutex_destroy(philo[i].rfork);
-		pthread_mutex_destroy(philo[i].lfork);
-		i++;
-	}
 	pthread_mutex_destroy(&philo->info->print);
-	
+	pthread_mutex_destroy(&philo->info->time);
+	pthread_mutex_destroy(&philo->info->meals);
 	i = 0;
 	while (i < philo->info->num_philo)
 	{
