@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:17:43 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/24 20:13:40 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/25 10:42:06 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,15 @@ int	main(int argc, char **argv)
 		{
 			guest[i].info = &info;
 			ft_philo_init(&guest[i],i);
-			//printf("Plus is : %d\n", guest[i].plus);
 			i++;
 		}
 		i = 0;
+		if(info.num_philo == 1)
+		{
+			pthread_create(&guest[i].philo, NULL, &ft_philo_alone, (void *)&guest[i]);
+			ft_free_program(guest);
+			return (0);
+		}
 		while(i < info.num_philo)
 		{
 			pthread_create(&guest[i].philo, NULL, &routine, (void *)&guest[i]);

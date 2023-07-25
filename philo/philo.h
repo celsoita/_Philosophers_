@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:20:53 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/24 20:21:29 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/25 10:34:40 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,6 +78,7 @@ void	*deathcheck(void *ph);
 //ft_free_program
 void	ft_free_program(t_philo *philo);
 //ft_routine
+void	*ft_philo_alone(void *ph);
 void	*routine(void *ph);
 void	ft_init_fork(t_philo *philo);
 

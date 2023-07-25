@@ -6,11 +6,22 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 16:43:32 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/24 20:27:49 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/25 10:35:00 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
+
+void	*ft_philo_alone(void *ph)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *) ph ;
+	ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, TAKE_RFORKS);
+	usleep(philo->info->dead_time * 1000);
+	ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, DIED);
+	return (NULL);
+}
 
 void	*routine(void *ph)
 {	
