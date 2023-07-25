@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:48:06 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/24 20:11:21 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/25 14:40:54 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,17 +45,15 @@ int	ft_time_ms(void)
 	return ((time.tv_sec * 1000) + (time.tv_usec / 1000));
 }
 
- void	ft_mutex_printf(useconds_t time,t_philo *philo, char *str)
- {
-	bool morto;
+void	ft_mutex_printf(useconds_t time, t_philo *philo, char *str)
+{
+	bool	morto;
 
 	pthread_mutex_lock(&philo->info->morto);
 	morto = philo->death;
 	pthread_mutex_unlock(&philo->info->morto);
-
 	pthread_mutex_lock(&philo->info->print);
-	
 	if (morto == false)
 		printf("%u %zu %s\n", time, philo->id, str);
 	pthread_mutex_unlock(&philo->info->print);
- }
+}

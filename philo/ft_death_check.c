@@ -6,22 +6,11 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 11:03:05 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/25 13:46:51 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/25 15:50:53 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-// void	*ft_check_meals(t_philo *philo)
-// {
-// 	pthread_mutex_lock(&philo->info->meals);
-// 	if (philo->eat_times == philo->info->eat_times)
-// 	{
-// 		pthread_mutex_unlock(&philo->info->meals);
-// 		return (NULL);
-// 	}
-// 	return (NULL);
-// }
 
 void	*deathcheck(void *ph)
 {
@@ -33,7 +22,7 @@ void	*deathcheck(void *ph)
 	{
 		i = 0;
 		pthread_mutex_lock(&philo->info->meals);
-		if (philo->eat_times >= philo->info->eat_times)
+		if (philo->eat_times == philo->info->eat_times)
 		{
 			pthread_mutex_unlock(&philo->info->meals);
 			return (NULL);

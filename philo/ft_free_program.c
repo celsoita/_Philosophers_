@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 16:31:42 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/25 10:43:39 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/25 14:39:12 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	ft_free_program(t_philo *philo)
 	size_t	i;
 
 	i = 0;
-	while(i < philo->info->num_philo)
+	while (i < philo->info->num_philo)
 	{
 		pthread_join(philo[i].philo, NULL);
 		i++;
@@ -37,5 +37,5 @@ void	ft_free_program(t_philo *philo)
 		i++;
 	}
 	free(philo->info->forks);
-	free(philo);	
+	free(philo);
 }

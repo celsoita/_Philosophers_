@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:17:43 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/25 13:36:23 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/25 16:01:53 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,36 +35,34 @@ int	main(int argc, char **argv)
 		i = 0;
 		guest = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
 		if (!guest)
-				return (0);
+			return (0);
 		info.eat_times = __INT_MAX__;
 		if (argc == 6)
 			info.eat_times = ft_atoi(argv[5]);
-		ft_info(argv,&info);
-		while(i < info.num_philo)
+		ft_info(argv, &info);
+		while (i < info.num_philo)
 		{
 			guest[i].info = &info;
-			ft_philo_init(&guest[i],i);
+			ft_philo_init(&guest[i], i);
 			i++;
 		}
 		i = 0;
-		if(info.num_philo == 1)
+		if (info.num_philo == 1)
 		{
-			pthread_create(&guest[i].philo, NULL, &ft_philo_alone, (void *)&guest[i]);
+			pthread_create(&guest[i].philo, NULL, &ft_philo_alone, \
+			(void *)&guest[i]);
 			ft_free_program(guest);
 			return (0);
 		}
-		while(i < info.num_philo)
+		while (i < info.num_philo)
 		{
 			pthread_create(&guest[i].philo, NULL, &routine, (void *)&guest[i]);
 			i++;
 		}
-	pthread_create(&guest->info->death, NULL, &deathcheck, (void *)guest);
-	ft_free_program(guest);
+		pthread_create(&guest->info->death, NULL, &deathcheck, (void *)guest);
+		ft_free_program(guest);
 	}
 	else
 		printf("a few arguments\n");
-	return(0);
+	return (0);
 }
-/*
-sembro aver risolto tutti i leak nel valgrind normale ora devo controllare i data race
-*/
