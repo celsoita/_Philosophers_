@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:20:53 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/25 15:52:43 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/25 16:18:41 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define TAKE_FORKS "\e[1;37mhas taken a fork\e[0m"
 # define THINKING "\e[1;32mis thinking\e[0m"
 # define SLEEPING "\e[1;34mis sleeping\e[0m"
-# define EATING "is eating"
+# define EATING "\e[1;35mis eating\e[0m"
 # define DIED "\e[1;31mdied\e[0m"
 
 typedef struct s_info
