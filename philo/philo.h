@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:20:53 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/25 10:34:40 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/25 10:54:27 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@
 # include <sys/time.h>
 # include <stdbool.h>
 
-# define TAKE_LFORKS "\e[1;37mhas taken a left fork\e[0m"
-# define TAKE_RFORKS "\e[1;37mhas taken a right fork\e[0m"
+# define TAKE_FORKS "\e[1;37mhas taken a fork\e[0m"
 # define THINKING "\e[1;32mis thinking\e[0m"
 # define SLEEPING "\e[1;34mis sleeping\e[0m"
 # define EATING "\e[1;35mis eating\e[0m"

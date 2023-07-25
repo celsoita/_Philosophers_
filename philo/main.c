@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:17:43 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/25 10:42:06 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/25 13:36:23 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,9 +58,11 @@ int	main(int argc, char **argv)
 			pthread_create(&guest[i].philo, NULL, &routine, (void *)&guest[i]);
 			i++;
 		}
-	}
 	pthread_create(&guest->info->death, NULL, &deathcheck, (void *)guest);
 	ft_free_program(guest);
+	}
+	else
+		printf("a few arguments\n");
 	return(0);
 }
 /*
