@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 16:43:32 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/25 17:35:57 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/26 11:55:32 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,6 @@ void	*routine(void *ph)
 		pthread_mutex_unlock(&philo->info->meals);
 		ft_sleep_think(philo);
 		pthread_mutex_lock(&philo->info->morto);
-		if (philo->death == true || philo->eat_times == philo->info->eat_times)
-		{
-			pthread_mutex_unlock(&philo->info->morto);
-			return (NULL);
-		}
 		pthread_mutex_unlock(&philo->info->morto);
 	}
 	return (NULL);
