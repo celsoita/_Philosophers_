@@ -6,13 +6,13 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 11:03:05 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/26 11:51:24 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/26 14:40:40 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
-static void	*deathcheck_died(t_philo *philo, size_t i)
+static void	*ft_deathcheck_died(t_philo *philo, size_t i)
 {
 	while (i < philo->info->num_philo)
 	{
@@ -35,10 +35,10 @@ static void	*deathcheck_died(t_philo *philo, size_t i)
 		pthread_mutex_unlock(&philo->info->time);
 		i++;
 	}
-	return (NULL);
+	return (philo);
 }
 
-void	*deathcheck(void *ph)
+void	*ft_deathcheck(void *ph)
 {
 	t_philo	*philo;
 	size_t	i;
@@ -54,9 +54,9 @@ void	*deathcheck(void *ph)
 			return (NULL);
 		}
 		pthread_mutex_unlock(&philo->info->meals);
-		if (deathcheck_died(philo, i) == NULL)
+		if (ft_deathcheck_died(philo, i) == NULL)
 			return (NULL);
-		usleep (10);
+		ft_msleep(5);
 	}
 	return (NULL);
 }

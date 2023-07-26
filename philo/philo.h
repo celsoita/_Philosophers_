@@ -6,7 +6,7 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:20:53 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/25 16:18:41 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/26 14:47:26 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define TAKE_FORKS "\e[1;37mhas taken a fork\e[0m"
 # define THINKING "\e[1;32mis thinking\e[0m"
 # define SLEEPING "\e[1;34mis sleeping\e[0m"
-# define EATING "\e[1;35mis eating\e[0m"
+# define EATING "\e[1;33mis eating\e[0m"
 # define DIED "\e[1;31mdied\e[0m"
 
 typedef struct s_info
@@ -62,6 +62,7 @@ typedef struct s_philo
 int		ft_atoi(const char *str);
 int		ft_time_ms(void);
 void	ft_mutex_printf(useconds_t time, t_philo *philo, char *str);
+void	ft_msleep(useconds_t time);
 //ft_check_arg
 int		ft_isdigit(char *str);
 int		ft_check_arg(int argc, char **argv);
@@ -70,12 +71,13 @@ bool	ft_perror(char *str);
 void	ft_info(char **argv, t_info *info);
 void	ft_philo_init(t_philo *philo, size_t id);
 //ft_death_check
-void	*deathcheck(void *ph);
+void	*ft_deathcheck(void *ph);
 //ft_free_program
 void	ft_free_program(t_philo *philo);
 //ft_routine
-void	*ft_philo_alone(void *ph);
 void	*routine(void *ph);
 void	ft_init_fork(t_philo *philo);
+//ft_philo_alone
+void	*ft_philo_alone(void *ph);
 
 #endif

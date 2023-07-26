@@ -2,7 +2,7 @@ CC = cc
 
 NAME = philo
 
-SRC = main.c ft_philo_utils.c ft_check_args.c ft_philo_init.c ft_death_check.c ft_free_program.c ft_routine.c
+SRC = main.c ft_philo_utils.c ft_check_args.c ft_philo_init.c ft_death_check.c ft_free_program.c ft_routine.c ft_philo_alone.c
 
 OBJ = $(SRC:.c=.o)
 

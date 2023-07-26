@@ -6,20 +6,11 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/21 17:17:43 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/26 11:28:01 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/26 14:40:58 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-/*
-• Any state change of a philosopher must be formatted as follows:
-◦ timestamp_in_ms X has taken a fork
-◦ timestamp_in_ms X is eating
-◦ timestamp_in_ms X is sleeping
-◦ timestamp_in_ms X is thinking
-◦ timestamp_in_ms X died
-*/
 
 static void	ft_main_philo_init(t_philo *guest, size_t i, t_info info)
 {
@@ -51,7 +42,7 @@ static void	ft_main_routine(t_philo *guest, t_info info, size_t i)
 static void	ft_main_end(t_philo *guest, t_info info, size_t i)
 {
 	ft_main_routine(guest, info, i);
-	pthread_create(&guest->info->death, NULL, &deathcheck, (void *)guest);
+	pthread_create(&guest->info->death, NULL, &ft_deathcheck, (void *)guest);
 	ft_free_program(guest);
 }
 
@@ -69,7 +60,7 @@ int	main(int argc, char **argv)
 		i = 0;
 		guest = malloc(sizeof(t_philo) * ft_atoi(argv[1]));
 		if (!guest)
-			return (0);
+			return (ft_perror("invalid malloc"));
 		ft_info(argv, &info);
 		if (argc == 6)
 			info.eat_times = ft_atoi(argv[5]);

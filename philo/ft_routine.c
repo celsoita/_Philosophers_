@@ -6,22 +6,11 @@
 /*   By: cschiavo <cschiavo@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/24 16:43:32 by cschiavo          #+#    #+#             */
-/*   Updated: 2023/07/26 11:55:32 by cschiavo         ###   ########.fr       */
+/*   Updated: 2023/07/26 14:41:19 by cschiavo         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
-
-void	*ft_philo_alone(void *ph)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *) ph ;
-	ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, TAKE_FORKS);
-	usleep(philo->info->dead_time * 1000);
-	ft_mutex_printf(ft_time_ms() - philo->info->start_time, philo, DIED);
-	return (NULL);
-}
 
 static void	ft_norm_routine(t_philo	*philo)
 {
@@ -51,7 +40,7 @@ static void	ft_norm_routine_val(t_philo	*philo)
 	pthread_mutex_lock(&philo->info->time);
 	philo->last_eat = ft_time_ms() - philo->info->start_time;
 	pthread_mutex_unlock(&philo->info->time);
-	usleep(philo->info->time_eat * 1000);
+	ft_msleep(philo->info->time_eat);
 	pthread_mutex_unlock(philo->rfork);
 	pthread_mutex_unlock(philo->lfork);
 }
@@ -60,26 +49,32 @@ static void	ft_sleep_think(t_philo	*philo)
 {
 	ft_mutex_printf(ft_time_ms() \
 	- philo->info->start_time, philo, SLEEPING);
-	usleep(philo->info->sleep_time * 1000);
+	ft_msleep(philo->info->sleep_time);
 	ft_mutex_printf(ft_time_ms() \
 	- philo->info->start_time, philo, THINKING);
-	usleep(philo->plus * 1000);
+	ft_msleep(philo->plus);
+}
+
+static	t_philo	*ft_cheat(void *ph)
+{
+	t_philo	*philo;
+
+	philo = (t_philo *) ph;
+	usleep(100 * ((philo->id + 1) % 2));
+	return (philo);
 }
 
 void	*routine(void *ph)
 {
 	t_philo	*philo;
-	size_t	num_of_meal;
 
-	num_of_meal = 0;
-	philo = (t_philo *) ph;
-	usleep(50 * ((philo->id) % 2));
+	philo = ft_cheat(ph);
 	while (1)
 	{
 		ft_norm_routine(philo);
 		ft_norm_routine_val(philo);
 		pthread_mutex_lock(&philo->info->meals);
-		philo->eat_times = num_of_meal++;
+		philo->eat_times++;
 		if (philo->eat_times == philo->info->eat_times)
 		{
 			pthread_mutex_unlock(&philo->info->meals);
@@ -88,6 +83,11 @@ void	*routine(void *ph)
 		pthread_mutex_unlock(&philo->info->meals);
 		ft_sleep_think(philo);
 		pthread_mutex_lock(&philo->info->morto);
+		if (philo->death == true || philo->eat_times == philo->info->eat_times)
+		{
+			pthread_mutex_unlock(&philo->info->morto);
+			return (NULL);
+		}
 		pthread_mutex_unlock(&philo->info->morto);
 	}
 	return (NULL);
