@@ -1,6 +1,6 @@
 # Philosophers
 
-The famous Dining Philosophers problem coded in C. <br>A project to learn about threads and mutexes and sempahore.
+The famous Dining Philosophers problem coded in C. <br>A project to learn about threads and mutexes.
 
 ## Usage
 | command | description |
